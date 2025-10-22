@@ -1,0 +1,55 @@
+题目大意：
+给定长度为n的0/1数组a，0表示好天气，1表示下雨。Jean想要爬山，每次爬山需要经过k天，每两次爬山休息1天。
+求出Jean能爬的山的最大值。
+
+分析：
+本题重点思想是DP，
+可以维护一个指针i，从0～n-1的过程中，引入虚拟指针j，从i～i+k-1的范围内，遍历天气情况。
+注意：i+k-1不能超过n-1，
+对于每一个j指针指向的a[j]，如果a[j] == 0，那么可以爬山的天数c+1。
+如果a[j] == 1，那么不管之前c积累了多少，一律归零，即break跳出循环。
+最后判断：
+如果c == k，那么次数+1；如果不满足，比如c<k，那么continue。
+此时i指针应当跳到i+k+1处，但是for循环自带++i，因此只要i = i + k即可。
+
+AC Code：
+#include <bits/stdc++.h>
+
+using namespace std;
+
+void solve()
+{
+    int n, k;
+    int ans = 0;
+    cin >> n >> k;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i)
+    {
+        cin >> a[i];
+    }
+    for (int i = 0; i < n; ++i)
+    {
+        if (i + k - 1 < n)
+        {
+            int c = 0;
+            for (int j = i; j <= i + k - 1; ++j)
+            {
+                if (a[j] == 0) ++c;
+                if (a[j] == 1) break;
+            }
+            if (c == k) {++ans; i = i + k;}
+            else continue;
+
+        } 
+    }
+    cout << ans << endl;
+}
+int main()
+{
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        solve();
+    }
+}
